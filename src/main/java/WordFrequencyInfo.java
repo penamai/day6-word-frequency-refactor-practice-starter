@@ -12,13 +12,11 @@ public class WordFrequencyInfo {
     }
 
     public WordFrequencyInfo(String word) {
-        this.word = word;
-        this.count = DEFAULT_COUNT;
+        this(word, DEFAULT_COUNT);
     }
 
     public WordFrequencyInfo(Map.Entry<String, List<WordFrequencyInfo>> entry) {
-        this.word = entry.getKey();
-        this.count = entry.getValue().size();
+        this(entry.getKey(), entry.getValue().size());
     }
 
     public String getWord() {
