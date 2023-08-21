@@ -9,8 +9,8 @@ public class WordFrequencyGame {
     public String getWordsWithFrequencies(String inputString) {
         try {
             List<String> wordsList = getListOfWords(inputString);
-            Map<String, List<WordFrequencyInfo>> stringWordFrequencyInfoMap = getStringWordFrequencyInfoMap(wordsList);
-            List<WordFrequencyInfo> wordFrequencyInfoList = extractWordFrequencyInfoList(stringWordFrequencyInfoMap);
+            Map<String, List<String>> stringListOfStringMap = getStringListOfStringMap(wordsList);
+            List<WordFrequencyInfo> wordFrequencyInfoList = extractWordFrequencyInfoList(stringListOfStringMap);
             wordFrequencyInfoList.sort(Comparator.comparingInt(WordFrequencyInfo::getWordCount).reversed());
 
             return generatePrintLines(wordFrequencyInfoList);
@@ -23,8 +23,8 @@ public class WordFrequencyGame {
         return List.of(inputString.split(MULTIPLE_SPACES_DELIMITER));
     }
 
-    private static List<WordFrequencyInfo> extractWordFrequencyInfoList(Map<String, List<WordFrequencyInfo>> stringWordFrequencyInfoMap) {
-        return stringWordFrequencyInfoMap.entrySet().stream()
+    private static List<WordFrequencyInfo> extractWordFrequencyInfoList(Map<String, List<String>> stringListOfStringMap) {
+        return stringListOfStringMap.entrySet().stream()
                 .map(WordFrequencyInfo::new)
                 .collect(Collectors.toList());
     }
@@ -39,17 +39,16 @@ public class WordFrequencyGame {
         return wordFrequencyInfo.getWord() + " " + wordFrequencyInfo.getWordCount();
     }
 
-    private Map<String, List<WordFrequencyInfo>> getStringWordFrequencyInfoMap(List<String> words) {
-        Map<String, List<WordFrequencyInfo>> stringWordFrequencyInfoMap = new HashMap<>();
+    private Map<String, List<String>> getStringListOfStringMap(List<String> words) {
+        Map<String, List<String>> stringListOfStringMap = new HashMap<>();
         words.forEach(word -> {
-            WordFrequencyInfo wordFrequencyInfo = new WordFrequencyInfo(word);
-            if (!stringWordFrequencyInfoMap.containsKey(word)) {
-                stringWordFrequencyInfoMap.put(word, new ArrayList<>(List.of(wordFrequencyInfo)));
+            if (!stringListOfStringMap.containsKey(word)) {
+                stringListOfStringMap.put(word, new ArrayList<>(List.of(word)));
             } else {
-                stringWordFrequencyInfoMap.get(word).add(wordFrequencyInfo);
+                stringListOfStringMap.get(word).add(word);
             }
         });
-        return stringWordFrequencyInfoMap;
+        return stringListOfStringMap;
     }
 
 }

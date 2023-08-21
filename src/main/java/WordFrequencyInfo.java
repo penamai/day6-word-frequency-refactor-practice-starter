@@ -2,7 +2,6 @@ import java.util.List;
 import java.util.Map;
 
 public class WordFrequencyInfo {
-    public static final int DEFAULT_COUNT = 1;
     private final String word;
     private final int count;
 
@@ -11,11 +10,7 @@ public class WordFrequencyInfo {
         this.count = count;
     }
 
-    public WordFrequencyInfo(String word) {
-        this(word, DEFAULT_COUNT);
-    }
-
-    public WordFrequencyInfo(Map.Entry<String, List<WordFrequencyInfo>> entry) {
+    public WordFrequencyInfo(Map.Entry<String, List<String>> entry) {
         this(entry.getKey(), entry.getValue().size());
     }
 
