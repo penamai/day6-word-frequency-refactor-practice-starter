@@ -7,39 +7,39 @@ public class WordFrequencyGame {
     public static final int ONE = 1;
     public static final String CALCULATE_ERROR = "Calculate Error";
 
-    public String getResult(String inputStr) {
-        if (inputStr.split(SPACE_DELIMITER + PLUS_SIGN).length == ONE) {
-            return inputStr + " 1";
+    public String getWordsWithFrequencies(String inputString) {
+        if (inputString.split(SPACE_DELIMITER + PLUS_SIGN).length == ONE) {
+            return inputString + " 1";
         } else {
             try {
                 //split the input string with 1 to n pieces of spaces
-                String[] arr = inputStr.split(SPACE_DELIMITER + PLUS_SIGN);
+                String[] wordsArray = inputString.split(SPACE_DELIMITER + PLUS_SIGN);
 
                 List<WordFrequencyInfo> wordFrequencyInfoList = new ArrayList<>();
-                for (String s : arr) {
-                    WordFrequencyInfo wordFrequencyInfo = new WordFrequencyInfo(s, ONE);
+                for (String word : wordsArray) {
+                    WordFrequencyInfo wordFrequencyInfo = new WordFrequencyInfo(word, ONE);
                     wordFrequencyInfoList.add(wordFrequencyInfo);
                 }
 
                 //get the map for the next step of sizing the same word
-                Map<String, List<WordFrequencyInfo>> map = getListMap(wordFrequencyInfoList);
+                Map<String, List<WordFrequencyInfo>> stringWordFrequencyInfoMap = getListMap(wordFrequencyInfoList);
 
-                List<WordFrequencyInfo> list = new ArrayList<>();
-                for (Map.Entry<String, List<WordFrequencyInfo>> entry : map.entrySet()) {
+                List<WordFrequencyInfo> wordFrequencyInfos = new ArrayList<>();
+                for (Map.Entry<String, List<WordFrequencyInfo>> entry : stringWordFrequencyInfoMap.entrySet()) {
                     WordFrequencyInfo wordFrequencyInfo = new WordFrequencyInfo(entry.getKey(), entry.getValue().size());
-                    list.add(wordFrequencyInfo);
+                    wordFrequencyInfos.add(wordFrequencyInfo);
                 }
-                wordFrequencyInfoList = list;
+                wordFrequencyInfoList = wordFrequencyInfos;
 
-                wordFrequencyInfoList.sort((w1, w2) -> w2.getWordCount() - w1.getWordCount());
+                wordFrequencyInfoList.sort((firstWord, secondWord) -> secondWord.getWordCount() - firstWord.getWordCount());
 
                 StringJoiner joiner = new StringJoiner(NEWLINE_DELIMITER);
-                for (WordFrequencyInfo w : wordFrequencyInfoList) {
-                    String s = w.getWord() + " " + w.getWordCount();
+                for (WordFrequencyInfo wordFrequencyInfo : wordFrequencyInfoList) {
+                    String s = wordFrequencyInfo.getWord() + " " + wordFrequencyInfo.getWordCount();
                     joiner.add(s);
                 }
                 return joiner.toString();
-            } catch (Exception e) {
+            } catch (Exception exception) {
                 return CALCULATE_ERROR;
             }
         }
@@ -50,7 +50,7 @@ public class WordFrequencyGame {
         for (WordFrequencyInfo wordFrequencyInfo : wordFrequencyInfoList) {
 //       map.computeIfAbsent(input.getValue(), k -> new ArrayList<>()).add(input);
             if (!map.containsKey(wordFrequencyInfo.getWord())) {
-                ArrayList arr = new ArrayList<>();
+                ArrayList<WordFrequencyInfo> arr = new ArrayList<>();
                 arr.add(wordFrequencyInfo);
                 map.put(wordFrequencyInfo.getWord(), arr);
             } else {
