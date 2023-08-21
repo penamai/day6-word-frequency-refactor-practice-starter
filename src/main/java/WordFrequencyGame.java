@@ -8,15 +8,10 @@ public class WordFrequencyGame {
 
     public String getWordsWithFrequencies(String inputString) {
         try {
-            List<String> wordsArray = getListOfWords(inputString);
-            List<WordFrequencyInfo> wordFrequencyInfoList = convertToWordFrequencyInfoList(wordsArray);
-            Map<String, List<WordFrequencyInfo>> stringWordFrequencyInfoMap = getStringWordFrequencyInfoMap(wordFrequencyInfoList);
-
-            List<WordFrequencyInfo> wordFrequencyInfos = convertToWordFrequencyInfoList(stringWordFrequencyInfoMap);
-
-            wordFrequencyInfoList = wordFrequencyInfos;
-
-            wordFrequencyInfoList.sort((firstWord, secondWord) -> secondWord.getWordCount() - firstWord.getWordCount());
+            List<String> wordsList = getListOfWords(inputString);
+            Map<String, List<WordFrequencyInfo>> stringWordFrequencyInfoMap = getStringWordFrequencyInfoMap(wordsList);
+            List<WordFrequencyInfo> wordFrequencyInfoList = extractWordFrequencyInfoList(stringWordFrequencyInfoMap);
+            wordFrequencyInfoList.sort(WordFrequencyGame::descendingComparator);
 
             return generatePrintLines(wordFrequencyInfoList);
         } catch (Exception exception) {
@@ -28,16 +23,14 @@ public class WordFrequencyGame {
         return List.of(inputString.split(MULTIPLE_SPACES_DELIMITER));
     }
 
-    private static List<WordFrequencyInfo> convertToWordFrequencyInfoList(List<String> wordsArray) {
-        return wordsArray.stream()
+    private static List<WordFrequencyInfo> extractWordFrequencyInfoList(Map<String, List<WordFrequencyInfo>> stringWordFrequencyInfoMap) {
+        return stringWordFrequencyInfoMap.entrySet().stream()
                 .map(WordFrequencyInfo::new)
                 .collect(Collectors.toList());
     }
 
-    private static List<WordFrequencyInfo> convertToWordFrequencyInfoList(Map<String, List<WordFrequencyInfo>> stringWordFrequencyInfoMap) {
-        return stringWordFrequencyInfoMap.entrySet().stream()
-                .map(WordFrequencyInfo::new)
-                .collect(Collectors.toList());
+    private static int descendingComparator(WordFrequencyInfo firstWord, WordFrequencyInfo secondWord) {
+        return secondWord.getWordCount() - firstWord.getWordCount();
     }
 
     private static String generatePrintLines(List<WordFrequencyInfo> wordFrequencyInfoList) {
@@ -50,10 +43,10 @@ public class WordFrequencyGame {
         return wordFrequencyInfo.getWord() + " " + wordFrequencyInfo.getWordCount();
     }
 
-    private Map<String, List<WordFrequencyInfo>> getStringWordFrequencyInfoMap(List<WordFrequencyInfo> wordFrequencyInfoList) {
+    private Map<String, List<WordFrequencyInfo>> getStringWordFrequencyInfoMap(List<String> words) {
         Map<String, List<WordFrequencyInfo>> stringWordFrequencyInfoMap = new HashMap<>();
-        wordFrequencyInfoList.forEach(wordFrequencyInfo -> {
-            String word = wordFrequencyInfo.getWord();
+        words.forEach(word -> {
+            WordFrequencyInfo wordFrequencyInfo = new WordFrequencyInfo(word);
             if (!stringWordFrequencyInfoMap.containsKey(word)) {
                 stringWordFrequencyInfoMap.put(word, new ArrayList<>(List.of(wordFrequencyInfo)));
             } else {
