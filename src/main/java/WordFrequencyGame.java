@@ -8,9 +8,7 @@ public class WordFrequencyGame {
 
     public String getWordsWithFrequencies(String inputString) {
         try {
-            List<String> wordsList = getListOfWords(inputString);
-            Map<String, List<String>> stringListOfStringMap = getStringListOfStringMap(wordsList);
-            List<WordFrequencyInfo> wordFrequencyInfoList = extractWordFrequencyInfoList(stringListOfStringMap);
+            List<WordFrequencyInfo> wordFrequencyInfoList = calculateWordFrequency(inputString);
             wordFrequencyInfoList.sort(Comparator.comparingInt(WordFrequencyInfo::getWordCount).reversed());
 
             return generatePrintLines(wordFrequencyInfoList);
@@ -19,8 +17,23 @@ public class WordFrequencyGame {
         }
     }
 
+    private List<WordFrequencyInfo> calculateWordFrequency(String inputString) {
+        List<String> wordsList = getListOfWords(inputString);
+        Map<String, List<String>> stringListOfStringMap = getStringListOfStringMap(wordsList);
+        return extractWordFrequencyInfoList(stringListOfStringMap);
+    }
+
     private static List<String> getListOfWords(String inputString) {
         return List.of(inputString.split(MULTIPLE_SPACES_DELIMITER));
+    }
+
+    private Map<String, List<String>> getStringListOfStringMap(List<String> words) {
+        Map<String, List<String>> stringListOfStringMap = new HashMap<>();
+        words.forEach(word -> {
+            stringListOfStringMap.put(word, stringListOfStringMap.getOrDefault(word, new ArrayList<>()));
+            stringListOfStringMap.get(word).add(word);
+        });
+        return stringListOfStringMap;
     }
 
     private static List<WordFrequencyInfo> extractWordFrequencyInfoList(Map<String, List<String>> stringListOfStringMap) {
@@ -37,15 +50,6 @@ public class WordFrequencyGame {
 
     private static String generateLineContent(WordFrequencyInfo wordFrequencyInfo) {
         return wordFrequencyInfo.getWord() + " " + wordFrequencyInfo.getWordCount();
-    }
-
-    private Map<String, List<String>> getStringListOfStringMap(List<String> words) {
-        Map<String, List<String>> stringListOfStringMap = new HashMap<>();
-        words.forEach(word -> {
-            stringListOfStringMap.put(word, stringListOfStringMap.getOrDefault(word, new ArrayList<>()));
-            stringListOfStringMap.get(word).add(word);
-        });
-        return stringListOfStringMap;
     }
 
 }
