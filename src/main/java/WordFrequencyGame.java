@@ -42,11 +42,8 @@ public class WordFrequencyGame {
     private Map<String, List<String>> getStringListOfStringMap(List<String> words) {
         Map<String, List<String>> stringListOfStringMap = new HashMap<>();
         words.forEach(word -> {
-            if (!stringListOfStringMap.containsKey(word)) {
-                stringListOfStringMap.put(word, new ArrayList<>(List.of(word)));
-            } else {
-                stringListOfStringMap.get(word).add(word);
-            }
+            stringListOfStringMap.put(word, stringListOfStringMap.getOrDefault(word, new ArrayList<>()));
+            stringListOfStringMap.get(word).add(word);
         });
         return stringListOfStringMap;
     }
