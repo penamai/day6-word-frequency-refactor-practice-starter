@@ -49,7 +49,7 @@ public class WordFrequencyGame {
     }
 
     private static String generateLineContent(WordFrequencyInfo wordFrequencyInfo) {
-        return wordFrequencyInfo.getWord() + " " + wordFrequencyInfo.getWordCount();
+        return String.format("%s %d", wordFrequencyInfo.getWord(), wordFrequencyInfo.getWordCount());
     }
 
 }
